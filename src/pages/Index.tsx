@@ -21,7 +21,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 overflow-x-hidden transition-colors duration-300">
       <Navigation activeSection={activeSection} onSectionClick={scrollToSection} />
       <HeroSection onSectionClick={scrollToSection} />
       <AboutSection />
