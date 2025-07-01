@@ -1,12 +1,22 @@
 
 import { useState } from 'react';
-import { Mail, Phone, Github, Linkedin, ExternalLink, MapPin, Calendar, Award, Code, Database, Monitor, Users, Star, Zap } from 'lucide-react';
+import { Mail, Phone, Github, Linkedin, ExternalLink, MapPin, Calendar, Award, Code, Database, Monitor, Users, Star, Zap, Send, User, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const { toast } = useToast();
 
   const skills = {
     "Programming Languages": ["Java", "Python", "C", "C++", "C#", "PHP", "HTML", "CSS", "JavaScript", "SQL"],
@@ -103,23 +113,48 @@ const Index = () => {
     "Pragati -Path To Failure (Infosys -2024)"
   ];
 
+  const scrollToSection = (sectionId: string) => {
+    setActiveSection(sectionId);
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Message Sent! 🎉",
+      description: "Thank you for reaching out! I'll get back to you soon.",
+    });
+    setFormData({ name: '', email: '', subject: '', message: '' });
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 overflow-x-hidden">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-gray-200">
+      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-lg z-50 border-b border-indigo-200 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <div className="text-2xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent animate-pulse">
               Manasi Bharati
             </div>
             <div className="hidden md:flex space-x-8">
-              {['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact'].map((item) => (
+              {['Home', 'About', 'Skills', 'Experience', 'Projects', 'Education', 'Achievements', 'Contact'].map((item) => (
                 <button
                   key={item}
-                  onClick={() => setActiveSection(item.toLowerCase())}
-                  className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className={`relative text-gray-700 hover:text-indigo-600 transition-all duration-300 font-medium px-3 py-2 rounded-lg hover:bg-indigo-50 transform hover:scale-105 ${
+                    activeSection === item.toLowerCase() ? 'text-indigo-600 bg-indigo-50' : ''
+                  }`}
                 >
                   {item}
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-600 to-cyan-600 transform scale-x-0 transition-transform duration-300 hover:scale-x-100"></span>
                 </button>
               ))}
             </div>
@@ -128,41 +163,58 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section id="home" className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-            <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-6 animate-fade-in">
+            <div className="flex-1 text-center lg:text-left animate-fade-in">
+              <div className="mb-6 animate-bounce">
+                <span className="inline-block px-4 py-2 bg-gradient-to-r from-indigo-100 to-cyan-100 text-indigo-800 rounded-full text-sm font-semibold mb-4">
+                  Welcome to my Portfolio! 👋
+                </span>
+              </div>
+              <h1 className="text-6xl lg:text-8xl font-bold text-gray-900 mb-6 leading-tight">
                 Full-Stack
-                <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent animate-pulse">
                   Developer
                 </span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-2xl animate-fade-in">
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl leading-relaxed">
                 Passionate about creating scalable web applications with expertise in MERN stack, 
                 Machine Learning, and Data Science. Experienced in building AI-powered solutions 
                 that enhance user engagement and operational efficiency.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button 
+                  onClick={() => scrollToSection('projects')}
+                  className="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 hover:from-indigo-700 hover:via-purple-700 hover:to-cyan-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl transform hover:-translate-y-1"
+                >
+                  <ExternalLink className="w-5 h-5 mr-2" />
                   View My Work
                 </Button>
-                <Button variant="outline" className="border-2 border-gray-300 hover:border-blue-600 px-8 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105">
-                  Download Resume
+                <Button 
+                  variant="outline" 
+                  onClick={() => scrollToSection('contact')}
+                  className="border-2 border-indigo-300 hover:border-indigo-600 hover:bg-indigo-50 px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform hover:-translate-y-1"
+                >
+                  <Mail className="w-5 h-5 mr-2" />
+                  Get In Touch
                 </Button>
               </div>
             </div>
             <div className="flex-1 flex justify-center lg:justify-end">
-              <div className="relative">
-                <div className="w-80 h-80 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 p-1 animate-fade-in">
+              <div className="relative animate-fade-in">
+                <div className="w-80 h-80 rounded-full bg-gradient-to-br from-indigo-400 via-purple-500 to-cyan-500 p-1 animate-pulse hover:scale-105 transition-transform duration-300">
                   <img 
                     src="/lovable-uploads/924b3ee3-9009-4303-8e33-00129ec50d46.png" 
                     alt="Manasi Bharati" 
-                    className="w-full h-full rounded-full object-cover bg-white p-2"
+                    className="w-full h-full rounded-full object-cover bg-white p-2 hover:rotate-3 transition-transform duration-300"
                   />
                 </div>
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center animate-pulse">
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center animate-bounce hover:animate-spin">
                   <Star className="w-12 h-12 text-white" />
+                </div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center animate-pulse">
+                  <Code className="w-8 h-8 text-white" />
                 </div>
               </div>
             </div>
@@ -171,54 +223,58 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-white to-indigo-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">About Me</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Professional Summary</h3>
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
+          <h2 className="text-5xl font-bold text-center text-gray-900 mb-16 animate-fade-in">About Me</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="animate-fade-in hover:transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-3xl font-semibold text-gray-900 mb-8 bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent">Professional Summary</h3>
+              <p className="text-gray-600 text-lg leading-relaxed mb-6 hover:text-gray-800 transition-colors duration-300">
                 I am an undergraduate student with a solid background in Operating Systems, Cloud Computing, 
                 Machine Learning, Data Science and Full Stack, and MERN Stack. Problem solving skill in Java 
                 using Data structures and algorithms for creating solutions. Skilled at designing scalable apps 
                 that improve user engagement and operational efficiency.
               </p>
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              <p className="text-gray-600 text-lg leading-relaxed mb-8 hover:text-gray-800 transition-colors duration-300">
                 Acknowledge for using state-of-the-art technologies to boost performance indicators in a variety 
                 of projects. Competent in making decisions, and producing significant results. Looking for chances 
                 to provide leadership and technical assistance to progressive groups.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-blue-600" />
-                  <span className="text-gray-700">manasibharati94@gmail.com</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="w-5 h-5 text-blue-600" />
-                  <span className="text-gray-700">+91 8329174703</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-blue-600" />
-                  <span className="text-gray-700">Pune, Maharashtra</span>
-                </div>
+              <div className="space-y-4">
+                {[
+                  { icon: Mail, text: "manasibharati94@gmail.com", color: "text-red-500" },
+                  { icon: Phone, text: "+91 8329174703", color: "text-green-500" },
+                  { icon: MapPin, text: "Pune, Maharashtra", color: "text-blue-500" }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-indigo-50 transition-all duration-300 hover:scale-105 cursor-pointer">
+                    <item.icon className={`w-6 h-6 ${item.color}`} />
+                    <span className="text-gray-700 font-medium">{item.text}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="space-y-6">
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">Soft Skills</h4>
-                <div className="flex flex-wrap gap-2">
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <h4 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Users className="w-6 h-6 text-indigo-600" />
+                  Soft Skills
+                </h4>
+                <div className="flex flex-wrap gap-3">
                   {["Team Work", "Collaboration", "Leadership", "Decision Making", "Communication"].map((skill) => (
-                    <Badge key={skill} variant="secondary" className="px-3 py-1">
+                    <Badge key={skill} variant="secondary" className="px-4 py-2 hover:bg-indigo-100 hover:scale-110 transition-all duration-300 cursor-pointer">
                       {skill}
                     </Badge>
                   ))}
                 </div>
               </div>
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">Hobbies</h4>
-                <div className="flex flex-wrap gap-2">
+              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <h4 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Star className="w-6 h-6 text-yellow-500" />
+                  Hobbies
+                </h4>
+                <div className="flex flex-wrap gap-3">
                   {["Cooking", "Cycling", "Badminton"].map((hobby) => (
-                    <Badge key={hobby} variant="outline" className="px-3 py-1">
+                    <Badge key={hobby} variant="outline" className="px-4 py-2 hover:bg-yellow-50 hover:border-yellow-300 hover:scale-110 transition-all duration-300 cursor-pointer">
                       {hobby}
                     </Badge>
                   ))}
@@ -230,25 +286,25 @@ const Index = () => {
       </section>
 
       {/* Skills Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-purple-50">
+      <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-100 via-purple-50 to-cyan-100">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Technical Skills</h2>
+          <h2 className="text-5xl font-bold text-center text-gray-900 mb-16 animate-fade-in">Technical Skills</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {Object.entries(skills).map(([category, skillList], index) => (
-              <Card key={category} className="hover:shadow-lg transition-shadow duration-300 animate-fade-in">
+              <Card key={category} className="hover:shadow-2xl transition-all duration-500 animate-fade-in hover:scale-105 hover:-translate-y-2 bg-gradient-to-br from-white to-indigo-50 border-2 border-transparent hover:border-indigo-200">
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    {index === 0 && <Code className="w-5 h-5 text-blue-600" />}
-                    {index === 1 && <Zap className="w-5 h-5 text-purple-600" />}
-                    {index === 2 && <Database className="w-5 h-5 text-green-600" />}
-                    {index === 3 && <Monitor className="w-5 h-5 text-orange-600" />}
+                  <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-3">
+                    {index === 0 && <Code className="w-6 h-6 text-indigo-600 animate-bounce" />}
+                    {index === 1 && <Zap className="w-6 h-6 text-purple-600 animate-pulse" />}
+                    {index === 2 && <Database className="w-6 h-6 text-green-600 animate-spin" />}
+                    {index === 3 && <Monitor className="w-6 h-6 text-orange-600 animate-bounce" />}
                     {category}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {skillList.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="px-2 py-1 text-sm">
+                      <Badge key={skill} variant="secondary" className="px-3 py-1 text-sm hover:bg-indigo-100 hover:scale-110 transition-all duration-300 cursor-pointer">
                         {skill}
                       </Badge>
                     ))}
@@ -261,30 +317,30 @@ const Index = () => {
       </section>
 
       {/* Experience Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Professional Experience</h2>
-          <div className="space-y-8">
+          <h2 className="text-5xl font-bold text-center text-gray-900 mb-16 animate-fade-in">Professional Experience</h2>
+          <div className="space-y-12">
             {experience.map((exp, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-2xl transition-all duration-500 hover:scale-105 bg-gradient-to-r from-white to-indigo-50 border-l-4 border-indigo-500 hover:border-l-8">
                 <CardHeader>
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                      <CardTitle className="text-xl font-semibold text-gray-900">{exp.role}</CardTitle>
-                      <CardDescription className="text-lg text-blue-600 font-medium">{exp.company}</CardDescription>
+                      <CardTitle className="text-2xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-300">{exp.role}</CardTitle>
+                      <CardDescription className="text-lg text-indigo-600 font-medium hover:text-indigo-800 transition-colors duration-300">{exp.company}</CardDescription>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Calendar className="w-4 h-4" />
+                    <div className="flex items-center gap-2 text-gray-600 bg-indigo-100 px-4 py-2 rounded-full hover:bg-indigo-200 transition-colors duration-300">
+                      <Calendar className="w-5 h-5" />
                       <span>{exp.duration}</span>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {exp.achievements.map((achievement, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-gray-700">{achievement}</span>
+                      <li key={idx} className="flex items-start gap-4 p-3 rounded-lg hover:bg-indigo-50 transition-all duration-300 hover:scale-105">
+                        <div className="w-3 h-3 bg-gradient-to-r from-indigo-600 to-cyan-600 rounded-full mt-2 flex-shrink-0 animate-pulse"></div>
+                        <span className="text-gray-700 hover:text-gray-900 transition-colors duration-300">{achievement}</span>
                       </li>
                     ))}
                   </ul>
@@ -296,35 +352,37 @@ const Index = () => {
       </section>
 
       {/* Projects Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 via-indigo-50 to-cyan-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Featured Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <h2 className="text-5xl font-bold text-center text-gray-900 mb-16 animate-fade-in">Featured Projects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {projects.map((project, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
+              <Card key={index} className="hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-3 overflow-hidden bg-white group">
+                <div className="relative h-64 overflow-hidden">
                   <img 
                     src={project.image} 
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/80 transition-all duration-300"></div>
                   <div className="absolute bottom-4 left-4 text-white">
-                    <p className="text-sm font-medium">{project.duration}</p>
+                    <p className="text-sm font-medium bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">{project.duration}</p>
+                  </div>
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <ExternalLink className="w-8 h-8 text-white hover:text-cyan-300 cursor-pointer animate-bounce" />
                   </div>
                 </div>
                 <CardHeader>
-                  <CardTitle className="text-xl font-semibold text-gray-900 flex items-center justify-between">
+                  <CardTitle className="text-2xl font-semibold text-gray-900 flex items-center justify-between group-hover:text-indigo-600 transition-colors duration-300">
                     {project.title}
-                    <ExternalLink className="w-5 h-5 text-blue-600 hover:text-blue-800 cursor-pointer" />
                   </CardTitle>
-                  <CardDescription className="text-blue-600 font-medium">{project.description}</CardDescription>
+                  <CardDescription className="text-indigo-600 font-medium group-hover:text-indigo-800 transition-colors duration-300">{project.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700 text-sm mb-4">{project.details}</p>
+                  <p className="text-gray-700 text-sm mb-6 leading-relaxed group-hover:text-gray-900 transition-colors duration-300">{project.details}</p>
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((tech) => (
-                      <Badge key={tech} variant="outline" className="px-2 py-1 text-xs">
+                      <Badge key={tech} variant="outline" className="px-3 py-1 text-xs hover:bg-indigo-100 hover:border-indigo-300 hover:scale-110 transition-all duration-300 cursor-pointer">
                         {tech}
                       </Badge>
                     ))}
@@ -337,21 +395,21 @@ const Index = () => {
       </section>
 
       {/* Education Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="education" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Education</h2>
-          <div className="space-y-6">
+          <h2 className="text-5xl font-bold text-center text-gray-900 mb-16 animate-fade-in">Education</h2>
+          <div className="space-y-8">
             {education.map((edu, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="pt-6">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <Card key={index} className="hover:shadow-2xl transition-all duration-500 hover:scale-105 bg-gradient-to-r from-white to-indigo-50 border-l-4 border-green-500 hover:border-l-8">
+                <CardContent className="pt-8">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900">{edu.degree}</h3>
-                      <p className="text-blue-600 font-medium">{edu.institution}</p>
+                      <h3 className="text-2xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-300">{edu.degree}</h3>
+                      <p className="text-indigo-600 font-medium text-lg hover:text-indigo-800 transition-colors duration-300">{edu.institution}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-gray-600">{edu.duration}</p>
-                      <p className="text-green-600 font-semibold">{edu.grade}</p>
+                      <p className="text-gray-600 mb-2 bg-gray-100 px-4 py-2 rounded-full hover:bg-indigo-100 transition-colors duration-300">{edu.duration}</p>
+                      <p className="text-green-600 font-bold text-xl bg-green-100 px-4 py-2 rounded-full hover:bg-green-200 transition-colors duration-300">{edu.grade}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -362,16 +420,16 @@ const Index = () => {
       </section>
 
       {/* Achievements Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-yellow-50 to-orange-50">
+      <section id="achievements" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Achievements & Certifications</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-5xl font-bold text-center text-gray-900 mb-16 animate-fade-in">Achievements & Certifications</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {achievements.map((achievement, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300 hover:scale-105">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-3">
-                    <Award className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
-                    <p className="text-gray-700 font-medium">{achievement}</p>
+              <Card key={index} className="hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 bg-gradient-to-br from-white to-yellow-50 group">
+                <CardContent className="pt-8">
+                  <div className="flex items-start gap-4">
+                    <Award className="w-8 h-8 text-yellow-600 flex-shrink-0 mt-1 group-hover:animate-spin" />
+                    <p className="text-gray-700 font-medium group-hover:text-gray-900 transition-colors duration-300">{achievement}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -381,52 +439,144 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-900 to-purple-900 text-white">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8">Let's Work Together</h2>
-          <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
-            I'm always interested in new opportunities and exciting projects. 
-            Let's discuss how we can bring your ideas to life!
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-            <a 
-              href="mailto:manasibharati94@gmail.com"
-              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105"
-            >
-              <Mail className="w-5 h-5" />
-              <span>manasibharati94@gmail.com</span>
-            </a>
-            <a 
-              href="tel:+918329174703"
-              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105"
-            >
-              <Phone className="w-5 h-5" />
-              <span>+91 8329174703</span>
-            </a>
+      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-900 via-purple-900 to-cyan-900 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold mb-8 animate-fade-in">Let's Work Together</h2>
+            <p className="text-xl text-indigo-100 mb-12 max-w-2xl mx-auto leading-relaxed">
+              I'm always interested in new opportunities and exciting projects. 
+              Let's discuss how we can bring your ideas to life!
+            </p>
           </div>
-          <div className="flex gap-6 justify-center">
-            <a 
-              href="https://github.com/Manas0304"
-              className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-            >
-              <Github className="w-6 h-6" />
-            </a>
-            <a 
-              href="https://linkedin.com/in/manasi-bharati-396530273"
-              className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-            >
-              <Linkedin className="w-6 h-6" />
-            </a>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            {/* Contact Info */}
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <h3 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Get In Touch</h3>
+                {[
+                  { icon: Mail, text: "manasibharati94@gmail.com", href: "mailto:manasibharati94@gmail.com" },
+                  { icon: Phone, text: "+91 8329174703", href: "tel:+918329174703" }
+                ].map((item, index) => (
+                  <a 
+                    key={index}
+                    href={item.href}
+                    className="flex items-center gap-4 bg-white/10 hover:bg-white/20 px-6 py-4 rounded-xl transition-all duration-300 hover:scale-105 group"
+                  >
+                    <item.icon className="w-6 h-6 group-hover:animate-bounce" />
+                    <span className="text-lg">{item.text}</span>
+                  </a>
+                ))}
+              </div>
+              
+              <div className="flex gap-6 justify-start">
+                <a 
+                  href="https://github.com/Manas0304"
+                  className="w-16 h-16 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-12"
+                >
+                  <Github className="w-8 h-8" />
+                </a>
+                <a 
+                  href="https://linkedin.com/in/manasi-bharati-396530273"
+                  className="w-16 h-16 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-12"
+                >
+                  <Linkedin className="w-8 h-8" />
+                </a>
+              </div>
+            </div>
+
+            {/* Contact Form */}
+            <div className="bg-white/10 backdrop-blur-lg p-8 rounded-2xl">
+              <h3 className="text-2xl font-semibold mb-6 flex items-center gap-3">
+                <MessageSquare className="w-6 h-6" />
+                Send Me a Message
+              </h3>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Your Name</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                      <Input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="Enter your name"
+                        className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-gray-300 focus:bg-white/30 transition-all duration-300"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Email Address</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                      <Input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="Enter your email"
+                        className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-gray-300 focus:bg-white/30 transition-all duration-300"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Subject</label>
+                  <Input
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    placeholder="What's this about?"
+                    className="bg-white/20 border-white/30 text-white placeholder:text-gray-300 focus:bg-white/30 transition-all duration-300"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Message</label>
+                  <Textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Tell me about your project or just say hello!"
+                    rows={4}
+                    className="bg-white/20 border-white/30 text-white placeholder:text-gray-300 focus:bg-white/30 transition-all duration-300"
+                    required
+                  />
+                </div>
+                <Button 
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl transform hover:-translate-y-1"
+                >
+                  <Send className="w-5 h-5 mr-2" />
+                  Send Message
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-gray-400">
-            © 2024 Manasi Bharati. All rights reserved. Built with React & Tailwind CSS.
-          </p>
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent mb-4">
+              Manasi Bharati
+            </h3>
+            <p className="text-gray-400 max-w-md mx-auto">
+              Building digital experiences that make a difference. Let's create something amazing together!
+            </p>
+          </div>
+          <div className="border-t border-gray-800 pt-6">
+            <p className="text-gray-400">
+              © 2024 Manasi Bharati. All rights reserved. Built with React & Tailwind CSS.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
