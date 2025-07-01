@@ -22,10 +22,10 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl z-50 border-b border-purple-200 dark:border-purple-800 shadow-xl">
+    <nav className="fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl z-50 border-b border-violet-200/50 dark:border-violet-800/50 shadow-lg transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-pulse">
+          <div className="text-2xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent animate-gradient">
             Manasi Bharati
           </div>
           
@@ -35,12 +35,12 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
               <button
                 key={item}
                 onClick={() => onSectionClick(item.toLowerCase())}
-                className={`relative text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-300 font-medium px-4 py-2 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/20 transform hover:scale-105 ${
-                  activeSection === item.toLowerCase() ? 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20' : ''
+                className={`relative text-slate-700 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-300 font-medium px-4 py-2 rounded-full hover:bg-violet-50 dark:hover:bg-violet-900/20 transform hover:scale-105 group ${
+                  activeSection === item.toLowerCase() ? 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/20' : ''
                 }`}
               >
                 {item}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 transform scale-x-0 transition-transform duration-300 hover:scale-x-100"></span>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-violet-600 to-cyan-600 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
               </button>
             ))}
             
@@ -49,12 +49,12 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="rounded-full hover:bg-purple-100 dark:hover:bg-purple-900/20 transition-all duration-300"
+              className="rounded-full hover:bg-violet-100 dark:hover:bg-violet-900/20 transition-all duration-300 hover:scale-110"
             >
               {isDark ? (
                 <Sun className="h-5 w-5 text-yellow-500 animate-spin" />
               ) : (
-                <Moon className="h-5 w-5 text-purple-600 animate-pulse" />
+                <Moon className="h-5 w-5 text-violet-600 animate-pulse" />
               )}
             </Button>
           </div>
@@ -65,19 +65,19 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="rounded-full"
+              className="rounded-full hover:bg-violet-100 dark:hover:bg-violet-900/20"
             >
               {isDark ? (
                 <Sun className="h-5 w-5 text-yellow-500" />
               ) : (
-                <Moon className="h-5 w-5 text-purple-600" />
+                <Moon className="h-5 w-5 text-violet-600" />
               )}
             </Button>
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleMobileMenu}
-              className="rounded-full"
+              className="rounded-full hover:bg-violet-100 dark:hover:bg-violet-900/20"
             >
               {isMobileMenuOpen ? (
                 <X className="h-5 w-5" />
@@ -99,8 +99,8 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
                     onSectionClick(item.toLowerCase());
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`text-left px-4 py-2 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-300 ${
-                    activeSection === item.toLowerCase() ? 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20' : 'text-gray-700 dark:text-gray-300'
+                  className={`text-left px-4 py-3 rounded-lg hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all duration-300 hover:scale-105 ${
+                    activeSection === item.toLowerCase() ? 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/20' : 'text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   {item}
